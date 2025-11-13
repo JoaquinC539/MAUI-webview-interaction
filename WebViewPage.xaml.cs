@@ -1,25 +1,45 @@
 using System.Web;
+using StaticWebApp.Services;
 
 namespace StaticWebApp;
 public partial class WebViewPage : ContentPage
 {
+    private LocalWebServer localWebServer;
+
     
     public WebViewPage()
     {
         InitializeComponent();
-
-        WebViewElement.Navigating +=NavigatingHandler;
-        SetUpComponent();        
+        WebViewElement.Navigating += NavigatingHandler;
+        localWebServer = LocalWebServer.GetLocalWebServer();
     }
 
-    public void SetUpComponent()
+    protected override void OnAppearing()
     {
-        // WebViewElement.Source = new UrlWebViewSource {Url="https://www.google.com/"};    
-        WebViewElement.Source = new UrlWebViewSource { Url = $"http://192.168.1.4:5173/?cachebuster={DateTime.Now.Ticks}" };        
-        WebViewElement.Reload();
+        base.OnAppearing();
+        localWebServer = LocalWebServer.GetLocalWebServer();
+        Initialize();
+    }
+
+    private  void Initialize()
+    {
+        try
+        {
+            localWebServer.StartServer();
+            Console.WriteLine("Starting app in: " + localWebServer.BaseUrl);
+            // WebViewElement.Source = new UrlWebViewSource {Url=localWebServer.BaseUrl};    
+            WebViewElement.Source = new UrlWebViewSource { Url = $"http://192.168.1.4:5173/?cachebuster={DateTime.Now.Ticks}" };        
+            
+        }
+        catch (System.Exception e)
+        {
+            Console.WriteLine("Exception at starting server: " + e.Message);
+            throw;
+        }
+        
     }
     
-    public void NavigatingHandler(object sender, WebNavigatingEventArgs e)
+    public void NavigatingHandler(object? sender, WebNavigatingEventArgs e)
     {
         Console.WriteLine("URL navegating to " + e.Url);
         if (!e.Url.Contains("cachebuster"))

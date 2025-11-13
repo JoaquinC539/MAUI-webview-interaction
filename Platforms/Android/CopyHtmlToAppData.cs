@@ -1,20 +1,20 @@
 using Android.Content.Res;
 
-namespace StaticWebApp;
+namespace StaticWebApp.Platform.Android;
 
 public static class CopyHtmlToAppData
 {
-    private static string AssetFolder = "browser";
+    private static string AssetFolder = "dist";
 
 
-    public static void Copy(AssetManager assets)
+    public static void Copy(AssetManager? assets)
     {
         if (assets == null)
         {
             Console.WriteLine("Assets null");
             return;
         }
-        string appDataDir = Path.Combine(FileSystem.AppDataDirectory, "browser");
+        string appDataDir = Path.Combine(FileSystem.AppDataDirectory, AssetFolder);
         CopyAssetsFolder(assets, AssetFolder, appDataDir);
         Console.WriteLine($"Copied assets from {AssetFolder} to {appDataDir}");
     }
@@ -22,6 +22,7 @@ public static class CopyHtmlToAppData
 
     private static void CopyAssetsFolder(AssetManager assets, string assetFolderPath, string destFolderPath)
     {
+        Console.WriteLine("Executing assets copier...");
         Directory.CreateDirectory(destFolderPath);
 
         string[] assetsList = assets.List(assetFolderPath) ?? [];
@@ -37,6 +38,7 @@ public static class CopyHtmlToAppData
             }
             else
             {
+                
                 using var assetStream = assets.Open(assetPath);
                 using var destStream = File.Create(destPath);
                 assetStream.CopyTo(destStream);

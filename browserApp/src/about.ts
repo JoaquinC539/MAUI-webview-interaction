@@ -8,7 +8,7 @@ const abouthtml = `
   `
 export function renderAboutPage() {
     document.querySelector<HTMLDivElement>('#app')!.innerHTML = abouthtml;
-
+    console.log("about")
     function setupLink() {
         const navigateIndex = () => {
             console.log("navigate index");

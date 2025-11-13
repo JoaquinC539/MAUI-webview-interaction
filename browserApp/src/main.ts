@@ -27,19 +27,21 @@ const indexhtml = `
     <p class="read-the-docs">
       Click on the Vite and TypeScript logos to learn more
     </p>
+    <hr>
+    <h3>Hola?</h3>
   </div>
+  
+  
+
 `
 
 export function renderMain() {
-  console.log("render main")
   document.querySelector<HTMLDivElement>('#app')!.innerHTML = indexhtml;
-  
   function setupToAbout() {
-    // Esto NO activará el evento Navigating
     const navigateToAbout = () => {
       console.log("navigate about");
       history.pushState({}, '', '/about');
-      renderAboutPage()
+      renderAboutPage();
     }
     const element = document.querySelector<HTMLAnchorElement>('#aSpa')!;
     element.addEventListener('click', () => {

@@ -39,6 +39,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<!-- <Compile Remove="dist\**" />
+		<None Update="dist\**">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory> -->
+		<!-- </None> -->
+		<Compile Remove="dist\**" />
+    <Content Include="dist\**">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+	</ItemGroup>
+
+	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 

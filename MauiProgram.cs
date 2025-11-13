@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using StaticWebApp.Services;
 
 namespace StaticWebApp;
 
@@ -7,6 +8,7 @@ public static class MauiProgram
 	public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();
+		// builder.Services.AddSingleton<LocalWebServer>();
 		builder
 			.UseMauiApp<App>()
 			.ConfigureFonts(fonts =>
