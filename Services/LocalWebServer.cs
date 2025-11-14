@@ -2,6 +2,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using EmbedIO;
+using EmbedIO.Cors;
+using EmbedIO.WebApi;
+using StaticWebApp.Controller;
 
 namespace StaticWebApp.Services;
 
@@ -9,22 +12,21 @@ public class LocalWebServer
 {
 
     private WebServer webServer;
-    private int port;
+    private int port = 7614;
 
     private string UiFolderName;
 
     private string rootpath;
 
     private string HostUrl => $"http://localhost:{port}";
-    public string BaseUrl => $"http://localhost:{port}/index.html";
+    public string BaseUrl => $"{HostUrl}/index.html";
     
     private static LocalWebServer? instance = null;
 
     private LocalWebServer()
     {
         UiFolderName = "dist";
-        // port = GetFreePort();
-        port = 7614;
+        port = GetFreePort();
         rootpath = GetStaticUiRootPath(UiFolderName);
         webServer = CreateWebServer(HostUrl, rootpath);
         Console.WriteLine($"Using this host: {HostUrl}");
@@ -56,7 +58,12 @@ public class LocalWebServer
         Console.WriteLine("Server from: " + url + " - " + rootpath);
         WebServer server = new WebServer(o => o
         .WithUrlPrefix(url)
-        .WithMode(HttpListenerMode.Microsoft))
+        .WithMode(HttpListenerMode.EmbedIO));
+        server.WithModule(GetCorsModule());
+        server
+        .WithWebApi("/api",m=> m
+            .WithController<ApiController>()
+            )
         .WithStaticFolder("/", rootpath, true);
         return server;
     }
@@ -94,7 +101,12 @@ public class LocalWebServer
         }
     }
     
-
+   private CorsModule GetCorsModule()
+    {
+        return new CorsModule("/",
+        origins: "*", headers: "*",methods:"*"
+        );
+    }
     
 }
 

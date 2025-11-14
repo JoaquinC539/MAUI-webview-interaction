@@ -10,7 +10,7 @@ public partial class WebViewPage : ContentPage
     public WebViewPage()
     {
         InitializeComponent();
-        WebViewElement.Navigating += NavigatingHandler;
+        // WebViewElement.Navigating += NavigatingHandler;
         localWebServer = LocalWebServer.GetLocalWebServer();
     }
 
@@ -27,8 +27,9 @@ public partial class WebViewPage : ContentPage
         {
             localWebServer.StartServer();
             Console.WriteLine("Starting app in: " + localWebServer.BaseUrl);
-            // WebViewElement.Source = new UrlWebViewSource {Url=localWebServer.BaseUrl};    
-            WebViewElement.Source = new UrlWebViewSource { Url = $"http://192.168.1.4:5173/?cachebuster={DateTime.Now.Ticks}" };        
+            WebViewElement.Source = new UrlWebViewSource {Url=localWebServer.BaseUrl};    
+            // WebViewElement.Source = new UrlWebViewSource { Url = $"http://192.168.1.4:5173/?cachebuster={DateTime.Now.Ticks}" };        
+            // WebViewElement.Source = new UrlWebViewSource { Url = $"http://localhost:5173/?cachebuster={DateTime.Now.Ticks}" };        
             
         }
         catch (System.Exception e)
